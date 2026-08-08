@@ -134,14 +134,16 @@ function createOrganism(x, y) {
     organisms.push({
 
         x: x,
-
         y: y,
 
         energy: 100,
 
         age: 0,
 
-        speed: 1 + Math.random()
+        speed: 1 + Math.random(),
+
+        // Reproduction cooldown
+        reproductionCooldown: 0
 
     });
 
@@ -369,62 +371,77 @@ function updateWorld() {
 
 
 
-    // =================================
-    // REPRODUCTION
-    // =================================
+// =================================
+// REPRODUCTION
+// =================================
 
-    let newOrganisms = [];
+let newOrganisms = [];
 
+for (let organism of organisms) {
 
-    for (let organism of organisms) {
+    // Countdown reproduction cooldown
+    if (organism.reproductionCooldown > 0) {
 
-
-        if (organism.energy > 150) {
-
-
-            organism.energy -= 60;
-
-
-            newOrganisms.push({
-
-                x:
-                organism.x +
-                (Math.random() - 0.5) * 20,
-
-
-                y:
-                organism.y +
-                (Math.random() - 0.5) * 20,
-
-
-                energy: 100,
-
-
-                age: 0,
-
-
-                // MUTATION
-
-                speed:
-                Math.max(
-
-                    0.2,
-
-                    organism.speed +
-
-                    (Math.random() - 0.5) *
-                    0.2
-
-                )
-
-            });
-
-        }
+        organism.reproductionCooldown--;
 
     }
 
 
-    organisms.push(...newOrganisms);
+    // Reproduce only when:
+    // 1. Enough energy
+    // 2. Cooldown is finished
+    // 3. Organism is old enough
+
+    if (
+
+        organism.energy > 160 &&
+
+        organism.reproductionCooldown <= 0 &&
+
+        organism.age > 2
+
+    ) {
+
+        organism.energy -= 80;
+
+        organism.reproductionCooldown = 300;
+
+
+        newOrganisms.push({
+
+            x:
+            organism.x +
+            (Math.random() - 0.5) * 20,
+
+            y:
+            organism.y +
+            (Math.random() - 0.5) * 20,
+
+            energy: 100,
+
+            age: 0,
+
+            // Mutation
+            speed:
+            Math.max(
+
+                0.2,
+
+                organism.speed +
+
+                (Math.random() - 0.5) * 0.2
+
+            ),
+
+            reproductionCooldown: 300
+
+        });
+
+    }
+
+}
+
+organisms.push(...newOrganisms);
 
 
 

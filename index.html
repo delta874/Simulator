@@ -1,1 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evolution World</title>
 
+<style>
+    body {
+        margin: 0;
+        background: #111;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    h1 {
+        margin: 20px 0 5px;
+    }
+
+    #stats {
+        margin: 10px;
+        font-size: 18px;
+    }
+
+    canvas {
+        border: 2px solid white;
+        background: #183b20;
+        max-width: 95%;
+    }
+
+    button {
+        margin: 10px 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>🌎 EVOLUTION WORLD</h1>
+
+<div id="stats">
+    Year: <span id="year">0</span> |
+    Population: <span id="population">0</span>
+</div>
+
+<canvas id="world" width="800" height="500"></canvas>
+
+<br>
+
+<button id="startButton">START</button>
+<button id="pauseButton">PAUSE</button>
+<button id="resetButton">RESET</button>
+
+<script>
+
+const canvas = document.getElementById("world");
+const ctx = canvas.getContext("2d");
+
+const yearDisplay = document.getElementById("year");
+const populationDisplay = document.getElementById("population");
+
+const startButton = document.getElementById("startButton");
+const pauseButton = document.getElementById("pauseButton");
+const resetButton = document.getElementById("resetButton");
+
+let organisms = [];
+let food = [];
+
+let year = 0;
+let running = false;
+
+const WORLD_WIDTH = canvas.width;
+const WORLD_HEIGHT = canvas.height;
+
+
+// -----------------------------
+// CREATE FOOD
+// -----------------------------
+
+function createFood() {
+
+    food.push({
+        x: Math.random() * WORLD_WIDTH,
+        y: Math.random() * WORLD_HEIGHT
+    });
+
+}
+
+
+// -----------------------------
+// CREATE ORGANISM
+// -----------------------------
+
+function createOrganism(x, y) {
+
+    organisms.push({
+
+        x: x,
+        y: y,
+
+        energy: 100,
+
+        age: 0,
+
+        speed: 1 + Math.random()
+
+    });
+
+}
+
+
+// -----------------------------
+// RESET WORLD
+// -----------------------------
+
+function resetWorld() {
+
+    organisms = [];
+    food = [];
+
+    year = 0;
+    running = false;
+
+    // Create starting organisms
+    for (let i = 0; i < 10; i++) {
+
+        createOrganism(
+            Math.random() * WORLD_WIDTH,
+            Math.random() * WORLD_HEIGHT
+        );
+
+    }
+
+    // Create food
+    for (let i = 0; i < 100; i++) {
+        createFood();
+    }
+
+    updateStats();
+    drawWorld();
+
+}
+
+
+// -----------------------------
+// UPDATE ORGANISMS
+// -----------------------------
+
+function updateWorld() {
+
+    for (let organism of organisms) {
+
+        // Random movement
+        organism.x += (Math.random() - 0.5) * organism.speed * 4;
+        organism.y += (Math.random() - 0.5) * organism.speed * 4;
+
+        // Keep organisms inside world
+        organism.x = Math.max(0, Math.min(WORLD_WIDTH, organism.x));
+        organism.y = Math.max(0, Math.min(WORLD_HEIGHT, organism.y));
+
+        // Lose energy
+        organism.energy -= 0.1;
+
+        // Age
+        organism.age += 0.01;
+
+
+        // Look for food
+        for (let i = food.length - 1; i >= 0; i--) {
+
+            let f = food[i];
+
+            let dx = organism.x - f.x;
+            let dy = organism.y - f.y;
+
+            let distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 10) {
+
+                organism.energy += 25;
+
+                food.splice(i, 1);
+
+                break;
+            }
+        }
+
+    }
+
+
+    // -----------------------------
+    // DEATH
+    // -----------------------------
+
+    organisms = organisms.filter(function(organism) {
+
+        return organism.energy > 0 && organism.age < 100;
+
+    });
+
+
+    // -----------------------------
+    // REPRODUCTION
+    // -----------------------------
+
+    let newOrganisms = [];
+
+    for (let organism of organisms) {
+
+        if (organism.energy > 150) {
+
+            organism.energy -= 60;
+
+            newOrganisms.push({
+
+                x: organism.x + (Math.random() - 0.5) * 20,
+
+                y: organism.y + (Math.random() - 0.5) * 20,
+
+                energy: 100,
+
+                age: 0,
+
+                // Mutation!
+                speed: Math.max(
+                    0.2,
+                    organism.speed + (Math.random() - 0.5) * 0.2
+                )
+
+            });
+
+        }
+
+    }
+
+    organisms.push(...newOrganisms);
+
+
+    // Add new food
+    if (food.length < 100) {
+
+        createFood();
+
+    }
+
+
+    year += 0.01;
+
+    updateStats();
+
+}
+
+
+// -----------------------------
+// DRAW WORLD
+// -----------------------------
+
+function drawWorld() {
+
+    ctx.clearRect(
+        0,
+        0,
+        WORLD_WIDTH,
+        WORLD_HEIGHT
+    );
+
+
+    // Draw food
+
+    for (let f of food) {
+
+        ctx.fillStyle = "lime";
+
+        ctx.fillRect(
+            f.x,
+            f.y,
+            4,
+            4
+        );
+
+    }
+
+
+    // Draw organisms
+
+    for (let organism of organisms) {
+
+        ctx.fillStyle = "cyan";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            organism.x,
+            organism.y,
+            6,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+
+    }
+
+}
+
+
+// -----------------------------
+// UPDATE STATS
+// -----------------------------
+
+function updateStats() {
+
+    yearDisplay.textContent = Math.floor(year);
+
+    populationDisplay.textContent = organisms.length;
+
+}
+
+
+// -----------------------------
+// MAIN LOOP
+// -----------------------------
+
+function gameLoop() {
+
+    if (running) {
+
+        updateWorld();
+
+        drawWorld();
+
+    }
+
+    requestAnimationFrame(gameLoop);
+
+}
+
+
+// -----------------------------
+// BUTTONS
+// -----------------------------
+
+startButton.addEventListener("click", function() {
+
+    running = true;
+
+});
+
+pauseButton.addEventListener("click", function() {
+
+    running = false;
+
+});
+
+resetButton.addEventListener("click", function() {
+
+    resetWorld();
+
+});
+
+
+// Start
+resetWorld();
+
+gameLoop();
+
+</script>
+
+</body>
+</html>

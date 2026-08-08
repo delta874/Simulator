@@ -134,15 +134,19 @@ function createOrganism(x, y) {
     organisms.push({
 
         x: x,
+
         y: y,
 
         energy: 100,
 
         age: 0,
 
-        speed: 1 + Math.random(),
+        speed: 1 + Math.random() * 2,
 
-        // Reproduction cooldown
+        vision: 50 + Math.random() * 50,
+
+        metabolism: 0.05 + Math.random() * 0.1,
+
         reproductionCooldown: 0
 
     });
@@ -230,7 +234,10 @@ function updateWorld() {
             Math.sqrt(dx * dx + dy * dy);
 
 
-            if (distance < nearestDistance) {
+            if (
+                distance < nearestDistance &&
+                distance < organism.vision
+            ) {
 
                 nearestDistance = distance;
 
@@ -274,6 +281,23 @@ function updateWorld() {
 
 
         // =============================
+        // RANDOM MOVEMENT
+        // =============================
+
+        else {
+
+            organism.x +=
+            (Math.random() - 0.5) *
+            organism.speed;
+
+            organism.y +=
+            (Math.random() - 0.5) *
+            organism.speed;
+
+        }
+
+
+        // =============================
         // KEEP INSIDE WORLD
         // =============================
 
@@ -301,7 +325,8 @@ function updateWorld() {
         // ENERGY
         // =============================
 
-        organism.energy -= 0.1;
+        organism.energy -=
+        organism.metabolism;
 
 
         // =============================
@@ -309,6 +334,19 @@ function updateWorld() {
         // =============================
 
         organism.age += 0.01;
+
+
+        // =============================
+        // REPRODUCTION COOLDOWN
+        // =============================
+
+        if (
+            organism.reproductionCooldown > 0
+        ) {
+
+            organism.reproductionCooldown--;
+
+        }
 
 
 
@@ -371,82 +409,114 @@ function updateWorld() {
 
 
 
-// =================================
-// REPRODUCTION
-// =================================
+    // =================================
+    // REPRODUCTION
+    // =================================
 
-let newOrganisms = [];
+    let newOrganisms = [];
 
-for (let organism of organisms) {
 
-    // Countdown reproduction cooldown
-    if (organism.reproductionCooldown > 0) {
+    for (let organism of organisms) {
 
-        organism.reproductionCooldown--;
+
+        if (
+
+            organism.energy > 160 &&
+
+            organism.reproductionCooldown <= 0 &&
+
+            organism.age > 2
+
+        ) {
+
+            organism.energy -= 80;
+
+            organism.reproductionCooldown = 300;
+
+
+            newOrganisms.push({
+
+                x:
+                organism.x +
+                (Math.random() - 0.5) * 20,
+
+
+                y:
+                organism.y +
+                (Math.random() - 0.5) * 20,
+
+
+                energy: 100,
+
+                age: 0,
+
+
+                // =============================
+                // MUTATED SPEED
+                // =============================
+
+                speed:
+                Math.max(
+
+                    0.2,
+
+                    organism.speed +
+
+                    (Math.random() - 0.5) *
+                    0.2
+
+                ),
+
+
+                // =============================
+                // MUTATED VISION
+                // =============================
+
+                vision:
+                Math.max(
+
+                    10,
+
+                    organism.vision +
+
+                    (Math.random() - 0.5) *
+                    10
+
+                ),
+
+
+                // =============================
+                // MUTATED METABOLISM
+                // =============================
+
+                metabolism:
+                Math.max(
+
+                    0.01,
+
+                    organism.metabolism +
+
+                    (Math.random() - 0.5) *
+                    0.02
+
+                ),
+
+
+                reproductionCooldown: 300
+
+            });
+
+        }
 
     }
 
 
-    // Reproduce only when:
-    // 1. Enough energy
-    // 2. Cooldown is finished
-    // 3. Organism is old enough
-
-    if (
-
-        organism.energy > 160 &&
-
-        organism.reproductionCooldown <= 0 &&
-
-        organism.age > 2
-
-    ) {
-
-        organism.energy -= 80;
-
-        organism.reproductionCooldown = 300;
-
-
-        newOrganisms.push({
-
-            x:
-            organism.x +
-            (Math.random() - 0.5) * 20,
-
-            y:
-            organism.y +
-            (Math.random() - 0.5) * 20,
-
-            energy: 100,
-
-            age: 0,
-
-            // Mutation
-            speed:
-            Math.max(
-
-                0.2,
-
-                organism.speed +
-
-                (Math.random() - 0.5) * 0.2
-
-            ),
-
-            reproductionCooldown: 300
-
-        });
-
-    }
-
-}
-
-organisms.push(...newOrganisms);
+    organisms.push(...newOrganisms);
 
 
 
     // =================================
-    // ADD MORE FOOD
+    // ADD FOOD
     // =================================
 
     if (food.length < 100) {
@@ -454,6 +524,7 @@ organisms.push(...newOrganisms);
         createFood();
 
     }
+
 
 
     // =================================
@@ -487,7 +558,6 @@ function drawWorld() {
         WORLD_HEIGHT
 
     );
-
 
 
     // =============================
@@ -634,7 +704,7 @@ resetButton.addEventListener(
 
 
 // =================================
-// START WORLD
+// START
 // =================================
 
 resetWorld();

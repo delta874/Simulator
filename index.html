@@ -3,26 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Pink Petals</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <div id="game">
 
+    <!-- Soft light in the background -->
+    <div id="sun-glow"></div>
+
+    <!-- Falling flowers -->
+    <div id="petals"></div>
+
+    <!-- Affection meter -->
     <div id="affection-box">
         💖 Affection:
         <span id="affection">0</span>
     </div>
 
+    <!-- Character -->
     <div id="character-area">
         <img id="character" src="" alt="">
     </div>
 
+    <!-- Dialogue -->
     <div id="textbox">
 
-        <h2 id="name">Narrator</h2>
+        <div id="name">
+            Narrator
+        </div>
 
         <p id="dialogue">
             Welcome to Pink Petals...

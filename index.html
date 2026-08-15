@@ -19,23 +19,92 @@
     <!-- Falling flowers -->
     <div id="petals"></div>
 
-    <!-- Affection meter -->
-    <div id="affection-box">
-        💖 Affection:
-        <span id="affection">0</span>
+
+    <!-- =========================
+         GAME HUD
+    ========================== -->
+
+    <div id="hud">
+
+        <div class="hud-row">
+
+            <span>
+                📅 Day
+                <span id="day">1</span>
+            </span>
+
+            <span>
+                💰 $
+                <span id="money">0</span>
+            </span>
+
+            <span>
+                ⚡
+                <span id="energy">100</span>
+            </span>
+
+        </div>
+
+
+        <div class="hud-row">
+
+            <span>
+                💖
+                <span id="affection">0</span>
+            </span>
+
+            <span>
+                🤝
+                <span id="friendship">0</span>
+            </span>
+
+            <span>
+                📍
+                <span id="location">Courtyard</span>
+            </span>
+
+        </div>
+
     </div>
 
-    <!-- Character -->
+
+    <!-- =========================
+         TITLE / LOCATION
+    ========================== -->
+
+    <div id="title-card">
+
+        <h1>🌸 Pink Petals 🌸</h1>
+
+        <p id="chapter-text">
+            Day 1 • Morning
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         CHARACTER AREA
+    ========================== -->
+
     <div id="character-area">
-        <img id="character" src="" alt="">
+
+        <img
+            id="character"
+            src=""
+            alt=""
+        >
+
     </div>
 
-    <!-- Dialogue -->
+
+    <!-- =========================
+         DIALOGUE
+    ========================== -->
+
     <div id="textbox">
 
-        <div id="name">
-            Narrator
-        </div>
+        <div id="name"></div>
 
         <p id="dialogue">
             Welcome to Pink Petals...
@@ -46,6 +115,7 @@
     </div>
 
 </div>
+
 
 <script src="script.js"></script>
 

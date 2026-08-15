@@ -4,6 +4,12 @@
 ================================= */
 
 let affection = 0;
+let friendship = 0;
+let money = 0;
+let energy = 100;
+let day = 1;
+let location = "Courtyard";
+
 let current = 0;
 let typingTimer;
 
@@ -21,6 +27,7 @@ const story = [
         {
             text:"Enter the academy",
             affection:0,
+            friendship:0,
             next:1
         }
     ]
@@ -33,6 +40,7 @@ const story = [
         {
             text:"Walk toward the courtyard",
             affection:0,
+            friendship:0,
             next:2
         }
     ]
@@ -45,12 +53,14 @@ const story = [
         {
             text:"Help pick up the books",
             affection:5,
+            friendship:5,
             next:3
         },
 
         {
             text:"Apologize quickly",
             affection:2,
+            friendship:2,
             next:4
         }
     ]
@@ -63,12 +73,14 @@ const story = [
         {
             text:"It's okay.",
             affection:5,
+            friendship:5,
             next:5
         },
 
         {
             text:"You seem nervous.",
             affection:8,
+            friendship:3,
             next:5
         }
     ]
@@ -81,6 +93,7 @@ const story = [
         {
             text:"Don't worry about it.",
             affection:5,
+            friendship:5,
             next:5
         }
     ]
@@ -93,12 +106,14 @@ const story = [
         {
             text:"I couldn't leave you like that.",
             affection:10,
+            friendship:5,
             next:6
         },
 
         {
             text:"Anyone would've helped.",
             affection:5,
+            friendship:8,
             next:6
         }
     ]
@@ -111,12 +126,14 @@ const story = [
         {
             text:"I'd like that.",
             affection:10,
+            friendship:5,
             next:7
         },
 
         {
             text:"See you around.",
             affection:5,
+            friendship:8,
             next:7
         }
     ]
@@ -129,6 +146,7 @@ const story = [
         {
             text:"Continue",
             affection:0,
+            friendship:0,
             next:8
         }
     ]
@@ -141,6 +159,44 @@ const story = [
 }
 
 ];
+
+
+/* =================================
+   UPDATE HUD
+================================= */
+
+function updateHUD(){
+
+    document.getElementById(
+        "affection"
+    ).textContent =
+        affection;
+
+    document.getElementById(
+        "friendship"
+    ).textContent =
+        friendship;
+
+    document.getElementById(
+        "money"
+    ).textContent =
+        money;
+
+    document.getElementById(
+        "energy"
+    ).textContent =
+        energy;
+
+    document.getElementById(
+        "day"
+    ).textContent =
+        day;
+
+    document.getElementById(
+        "location"
+    ).textContent =
+        location;
+}
 
 
 /* =================================
@@ -160,7 +216,8 @@ function typeText(text){
 
     typingTimer = setInterval(() => {
 
-        dialogue.textContent += text.charAt(i);
+        dialogue.textContent +=
+            text.charAt(i);
 
         i++;
 
@@ -180,7 +237,8 @@ function typeText(text){
 
 function renderScene(){
 
-    const scene = story[current];
+    const scene =
+        story[current];
 
     const nameBox =
         document.getElementById("name");
@@ -199,12 +257,15 @@ function renderScene(){
             scene.name;
     }
 
+
     typeText(scene.text);
+
 
     const choices =
         document.getElementById("choices");
 
     choices.innerHTML = "";
+
 
     scene.choices.forEach(choice => {
 
@@ -214,32 +275,26 @@ function renderScene(){
         button.textContent =
             choice.text;
 
+
         button.onclick = () => {
 
             affection +=
                 choice.affection || 0;
 
-            const affectionBox =
-                document.getElementById("affection");
+            friendship +=
+                choice.friendship || 0;
 
-            affectionBox.textContent =
-                affection;
-
-            if(affection >= 25){
-
-                document.getElementById(
-                    "affection-box"
-                ).innerHTML =
-                "💖 Crushing: " +
-                affection;
-            }
 
             current =
                 choice.next;
 
+
+            updateHUD();
+
             renderScene();
 
         };
+
 
         choices.appendChild(button);
 
@@ -263,18 +318,23 @@ function createPetal(){
     petal.textContent =
         "🌸";
 
+
     petal.style.left =
         Math.random() * 100 + "vw";
+
 
     petal.style.fontSize =
         (14 + Math.random() * 14) + "px";
 
+
     petal.style.animationDuration =
         (5 + Math.random() * 5) + "s";
+
 
     document
         .getElementById("game")
         .appendChild(petal);
+
 
     setTimeout(() => {
 
@@ -286,9 +346,19 @@ function createPetal(){
 
 
 /* =================================
-   START
+   START PETALS
 ================================= */
 
-setInterval(createPetal, 450);
+setInterval(
+    createPetal,
+    450
+);
+
+
+/* =================================
+   START GAME
+================================= */
+
+updateHUD();
 
 renderScene();

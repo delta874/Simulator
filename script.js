@@ -5,7 +5,6 @@
 
 let affection = 0;
 let current = 0;
-let typing = false;
 let typingTimer;
 
 
@@ -15,141 +14,131 @@ let typingTimer;
 
 const story = [
 
-    {
-        name: "Narrator",
+{
+    name:"",
+    text:"Cherry blossoms drift through the spring air as you stand before the gates of Paper Lantern Academy.",
+    choices:[
+        {
+            text:"Enter the academy",
+            affection:0,
+            next:1
+        }
+    ]
+},
 
-        text:
-        "A warm spring breeze drifts through the academy gates.",
+{
+    name:"",
+    text:"Students hurry between classes while pink petals dance in the breeze.",
+    choices:[
+        {
+            text:"Walk toward the courtyard",
+            affection:0,
+            next:2
+        }
+    ]
+},
 
-        choices: [
+{
+    name:"",
+    text:"Someone suddenly crashes into you. Books scatter across the stone path.",
+    choices:[
+        {
+            text:"Help pick up the books",
+            affection:5,
+            next:3
+        },
 
-            {
-                text: "Enter the school",
-                affection: 0,
-                next: 1
-            }
+        {
+            text:"Apologize quickly",
+            affection:2,
+            next:4
+        }
+    ]
+},
 
-        ]
-    },
+{
+    name:"Aster",
+    text:"Ah! I'm so sorry! I wasn't looking where I was going!",
+    choices:[
+        {
+            text:"It's okay.",
+            affection:5,
+            next:5
+        },
 
+        {
+            text:"You seem nervous.",
+            affection:8,
+            next:5
+        }
+    ]
+},
 
-    {
-        name: "Narrator",
+{
+    name:"Aster",
+    text:"No, no, it's my fault. I get distracted way too easily.",
+    choices:[
+        {
+            text:"Don't worry about it.",
+            affection:5,
+            next:5
+        }
+    ]
+},
 
-        text:
-        "Someone suddenly bumps into you and drops their books everywhere.",
+{
+    name:"Aster",
+    text:"Thanks for helping me. Most people would've just walked by.",
+    choices:[
+        {
+            text:"I couldn't leave you like that.",
+            affection:10,
+            next:6
+        },
 
-        choices: [
+        {
+            text:"Anyone would've helped.",
+            affection:5,
+            next:6
+        }
+    ]
+},
 
-            {
-                text: "Help pick them up",
-                affection: 5,
-                next: 2
-            },
+{
+    name:"Aster",
+    text:"I'm Aster. Maybe we'll see each other around campus?",
+    choices:[
+        {
+            text:"I'd like that.",
+            affection:10,
+            next:7
+        },
 
-            {
-                text: "Apologize",
-                affection: 2,
-                next: 3
-            }
+        {
+            text:"See you around.",
+            affection:5,
+            next:7
+        }
+    ]
+},
 
-        ]
-    },
+{
+    name:"",
+    text:"The bell rings across campus. Your first day at Paper Lantern Academy has officially begun.",
+    choices:[
+        {
+            text:"Continue",
+            affection:0,
+            next:8
+        }
+    ]
+},
 
-
-    {
-        name: "Aster",
-
-        text:
-        "T-thank you... I thought I was going to be late.",
-
-        choices: [
-
-            {
-                text: "You're welcome.",
-                affection: 3,
-                next: 4
-            },
-
-            {
-                text: "Are you okay?",
-                affection: 5,
-                next: 4
-            }
-
-        ]
-    },
-
-
-    {
-        name: "Aster",
-
-        text:
-        "Oh! It's okay! I probably should've been watching where I was going.",
-
-        choices: [
-
-            {
-                text: "Don't worry about it.",
-                affection: 3,
-                next: 4
-            }
-
-        ]
-    },
-
-
-    {
-        name: "Aster",
-
-        text:
-        "I'm Aster, by the way. It's nice to meet you.",
-
-        choices: [
-
-            {
-                text: "Nice to meet you too.",
-                affection: 5,
-                next: 5
-            },
-
-            {
-                text: "I like your name.",
-                affection: 8,
-                next: 5
-            }
-
-        ]
-    },
-
-
-    {
-        name: "Narrator",
-
-        text:
-        "The bell rings. Your first day at the academy has officially begun.",
-
-        choices: [
-
-            {
-                text: "Go to class",
-                affection: 0,
-                next: 6
-            }
-
-        ]
-    },
-
-
-    {
-        name: "Narrator",
-
-        text:
-        "You wonder what the rest of the year will bring...",
-
-        choices: []
-
-    }
+{
+    name:"",
+    text:"🌸 End of Demo 🌸",
+    choices:[]
+}
 
 ];
 
@@ -169,8 +158,6 @@ function typeText(text){
 
     let i = 0;
 
-    typing = true;
-
     typingTimer = setInterval(() => {
 
         dialogue.textContent += text.charAt(i);
@@ -181,7 +168,6 @@ function typeText(text){
 
             clearInterval(typingTimer);
 
-            typing = false;
         }
 
     }, 25);
@@ -194,21 +180,31 @@ function typeText(text){
 
 function renderScene(){
 
-    const scene =
-        story[current];
+    const scene = story[current];
 
-    document.getElementById("name")
-        .textContent =
-        scene.name;
+    const nameBox =
+        document.getElementById("name");
+
+    if(scene.name === ""){
+
+        nameBox.style.display =
+            "none";
+
+    }else{
+
+        nameBox.style.display =
+            "inline-block";
+
+        nameBox.textContent =
+            scene.name;
+    }
 
     typeText(scene.text);
-
 
     const choices =
         document.getElementById("choices");
 
     choices.innerHTML = "";
-
 
     scene.choices.forEach(choice => {
 
@@ -218,27 +214,32 @@ function renderScene(){
         button.textContent =
             choice.text;
 
-
         button.onclick = () => {
 
             affection +=
                 choice.affection || 0;
 
+            const affectionBox =
+                document.getElementById("affection");
 
-            document.getElementById(
-                "affection"
-            ).textContent =
+            affectionBox.textContent =
                 affection;
 
+            if(affection >= 25){
+
+                document.getElementById(
+                    "affection-box"
+                ).innerHTML =
+                "💖 Crushing: " +
+                affection;
+            }
 
             current =
                 choice.next;
 
-
             renderScene();
 
         };
-
 
         choices.appendChild(button);
 
@@ -248,7 +249,7 @@ function renderScene(){
 
 
 /* =================================
-   CHERRY BLOSSOM PETALS
+   CHERRY BLOSSOMS
 ================================= */
 
 function createPetal(){
@@ -256,27 +257,24 @@ function createPetal(){
     const petal =
         document.createElement("div");
 
-    petal.className = "petal";
+    petal.className =
+        "petal";
 
-    petal.textContent = "🌸";
-
+    petal.textContent =
+        "🌸";
 
     petal.style.left =
         Math.random() * 100 + "vw";
 
-
     petal.style.fontSize =
         (14 + Math.random() * 14) + "px";
-
 
     petal.style.animationDuration =
         (5 + Math.random() * 5) + "s";
 
-
     document
         .getElementById("game")
         .appendChild(petal);
-
 
     setTimeout(() => {
 
@@ -288,14 +286,9 @@ function createPetal(){
 
 
 /* =================================
-   START PETAL SYSTEM
+   START
 ================================= */
 
 setInterval(createPetal, 450);
-
-
-/* =================================
-   START GAME
-================================= */
 
 renderScene();

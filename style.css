@@ -1,294 +1,123 @@
-*{
-    box-sizing:border-box;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-html,
-body{
-    margin:0;
-    width:100%;
-    height:100%;
+    <title>Pink Petals</title>
 
-    overflow:hidden;
+    <link rel="stylesheet" href="style.css">
+</head>
 
-    font-family:
-        Arial,
-        sans-serif;
-}
+<body>
 
-body{
+<div id="game">
 
-    background:
-        linear-gradient(
-            180deg,
-            #ffeef7 0%,
-            #ffddeb 50%,
-            #ffcfe3 100%
-        );
-}
+    <!-- Soft light in the background -->
+    <div id="sun-glow"></div>
 
-/* =========================
-   GAME
-========================= */
+    <!-- Falling flowers -->
+    <div id="petals"></div>
 
-#game{
 
-    position:relative;
+    <!-- =========================
+         GAME HUD
+    ========================== -->
 
-    width:100vw;
-    height:100vh;
+    <div id="hud">
 
-    overflow:hidden;
-}
+        <div class="hud-row">
 
-/* =========================
-   BACKGROUND GLOW
-========================= */
+            <span>
+                📅 Day
+                <span id="day">1</span>
+            </span>
 
-#sun-glow{
+            <span>
+                💰 $
+                <span id="money">0</span>
+            </span>
 
-    position:absolute;
+            <span>
+                ⚡
+                <span id="energy">100</span>
+            </span>
 
-    top:-120px;
-    right:-100px;
+        </div>
 
-    width:420px;
-    height:420px;
 
-    border-radius:50%;
+        <div class="hud-row">
 
-    background:
-        rgba(255,255,255,0.55);
+            <span>
+                💖
+                <span id="affection">0</span>
+            </span>
 
-    filter:blur(55px);
+            <span>
+                🤝
+                <span id="friendship">0</span>
+            </span>
 
-    pointer-events:none;
-}
+            <span>
+                📍
+                <span id="location">Courtyard</span>
+            </span>
 
-/* =========================
-   CHARACTER
-========================= */
+        </div>
 
-#character-area{
+    </div>
 
-    position:absolute;
 
-    top:5%;
-    left:0;
+    <!-- =========================
+         TITLE / LOCATION
+    ========================== -->
 
-    width:100%;
-    height:55%;
+    <div id="title-card">
 
-    display:flex;
+        <h1>🌸 Pink Petals 🌸</h1>
 
-    justify-content:center;
-    align-items:flex-end;
+        <p id="chapter-text">
+            Day 1 • Morning
+        </p>
 
-    pointer-events:none;
-}
+    </div>
 
-#character{
 
-    max-width:80%;
-    max-height:100%;
+    <!-- =========================
+         CHARACTER AREA
+    ========================== -->
 
-    object-fit:contain;
+    <div id="character-area">
 
-    filter:
-        drop-shadow(
-            0 10px 15px
-            rgba(0,0,0,0.12)
-        );
-}
+        <img
+            id="character"
+            src=""
+            alt=""
+        >
 
-/* =========================
-   AFFECTION
-========================= */
+    </div>
 
-#affection-box{
 
-    position:absolute;
+    <!-- =========================
+         DIALOGUE
+    ========================== -->
 
-    top:20px;
-    left:20px;
+    <div id="textbox">
 
-    z-index:20;
+        <div id="name"></div>
 
-    padding:10px 16px;
+        <p id="dialogue">
+            Welcome to Pink Petals...
+        </p>
 
-    background:
-        rgba(255,255,255,0.9);
+        <div id="choices"></div>
 
-    border:
-        2px solid #ff9ecb;
+    </div>
 
-    border-radius:25px;
+</div>
 
-    color:#d94f91;
 
-    font-weight:bold;
+<script src="script.js"></script>
 
-    box-shadow:
-        0 5px 15px
-        rgba(180,80,130,0.15);
-
-    backdrop-filter:blur(5px);
-}
-
-/* =========================
-   DIALOGUE BOX
-========================= */
-#textbox{
-    position:absolute;
-
-    left:0;
-    bottom:0;
-
-    width:100%;
-    height:245px;
-
-    z-index:30;
-
-    padding:18px 30px;
-
-    background:rgba(255,255,255,0.95);
-
-    border-top:4px solid #ff9ecb;
-
-    box-shadow:
-        0 -8px 25px
-        rgba(150,70,110,0.12);
-
-    backdrop-filter:blur(10px);
-}
-
-#dialogue{
-    margin:5px 0 12px;
-
-    color:#633b50;
-
-    font-size:18px;
-
-    line-height:1.45;
-
-    min-height:30px;
-}
-
-#choices{
-    display:flex;
-
-    flex-wrap:wrap;
-
-    gap:8px;
-
-    min-height:45px;
-}
-
-button{
-    display:block;
-
-    padding:10px 20px;
-
-    background:#fff;
-
-    border:2px solid #ff9ecb;
-
-    border-radius:22px;
-
-    color:#c94f8d;
-
-    font-size:15px;
-
-    cursor:pointer;
-
-    transition:
-        transform 0.15s,
-        background 0.15s,
-        box-shadow 0.15s;
-}
-
-button:hover{
-    background:#ffe3ef;
-
-    transform:
-        translateY(-2px)
-        scale(1.03);
-
-    box-shadow:
-        0 5px 12px
-        rgba(220,80,140,0.18);
-}
-
-/* =========================
-   FLOWERS
-========================= */
-
-.petal{
-
-    position:absolute;
-
-    top:-40px;
-
-    z-index:10;
-
-    font-size:20px;
-
-    pointer-events:none;
-
-    animation:
-        fall linear forwards;
-
-    opacity:0.85;
-}
-
-@keyframes fall{
-
-    0%{
-
-        transform:
-            translateY(-40px)
-            rotate(0deg);
-
-        opacity:0;
-    }
-
-    10%{
-
-        opacity:0.9;
-    }
-
-    100%{
-
-        transform:
-            translateY(
-                calc(100vh - 250px)
-            )
-            rotate(360deg);
-
-        opacity:0;
-    }
-}
-
-/* =========================
-   SMALL SCREENS
-========================= */
-
-@media(max-height:600px){
-
-    #textbox{
-
-        height:190px;
-
-        padding:12px 20px;
-    }
-
-    #dialogue{
-
-        font-size:15px;
-    }
-
-    button{
-
-        padding:7px 14px;
-        font-size:13px;
-    }
-}
+</body>
+</html>

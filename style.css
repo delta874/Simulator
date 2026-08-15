@@ -137,26 +137,22 @@ body{
 /* =========================
    DIALOGUE BOX
 ========================= */
-
 #textbox{
-
     position:absolute;
 
     left:0;
     bottom:0;
 
     width:100%;
-    height:230px;
+    height:245px;
 
     z-index:30;
 
-    padding:20px 30px;
+    padding:18px 30px;
 
-    background:
-        rgba(255,255,255,0.94);
+    background:rgba(255,255,255,0.95);
 
-    border-top:
-        4px solid #ff9ecb;
+    border-top:4px solid #ff9ecb;
 
     box-shadow:
         0 -8px 25px
@@ -165,75 +161,36 @@ body{
     backdrop-filter:blur(10px);
 }
 
-/* =========================
-   CHARACTER NAME
-========================= */
-
-#name{
-
-    display:inline-block;
-
-    padding:8px 22px;
-
-    margin-bottom:8px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff9ecb,
-            #ffb9d8
-        );
-
-    color:white;
-
-    font-size:18px;
-    font-weight:bold;
-
-    border-radius:20px;
-
-    box-shadow:
-        0 3px 8px
-        rgba(220,80,140,0.2);
-}
-
-/* =========================
-   DIALOGUE
-========================= */
-
 #dialogue{
-
     margin:5px 0 12px;
 
     color:#633b50;
 
     font-size:18px;
 
-    line-height:1.5;
+    line-height:1.45;
 
-    min-height:28px;
+    min-height:30px;
 }
 
-/* =========================
-   CHOICES
-========================= */
-
 #choices{
-
     display:flex;
 
     flex-wrap:wrap;
 
     gap:8px;
+
+    min-height:45px;
 }
 
 button{
+    display:block;
 
     padding:10px 20px;
 
     background:#fff;
 
-    border:
-        2px solid #ff9ecb;
+    border:2px solid #ff9ecb;
 
     border-radius:22px;
 
@@ -250,7 +207,6 @@ button{
 }
 
 button:hover{
-
     background:#ffe3ef;
 
     transform:
@@ -260,11 +216,6 @@ button:hover{
     box-shadow:
         0 5px 12px
         rgba(220,80,140,0.18);
-}
-
-button:active{
-
-    transform:scale(0.97);
 }
 
 /* =========================

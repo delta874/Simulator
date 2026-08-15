@@ -1,1 +1,82 @@
+body{
+    margin:0;
+    overflow:hidden;
+    background:#ffd6ea;
+    font-family:Arial,sans-serif;
+}
 
+#game{
+    width:100vw;
+    height:100vh;
+    position:relative;
+}
+
+#character-area{
+    position:absolute;
+    top:10%;
+    width:100%;
+    text-align:center;
+}
+
+#character{
+    max-height:500px;
+}
+
+#textbox{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    background:rgba(255,255,255,0.9);
+    border-top:4px solid #ff9ecb;
+    padding:20px;
+    box-sizing:border-box;
+}
+
+#name{
+    color:#ff69b4;
+}
+
+button{
+    background:#ffb6d9;
+    border:none;
+    padding:10px 20px;
+    margin:5px;
+    border-radius:15px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#ff8fc2;
+}
+
+#affection-box{
+    position:absolute;
+    top:20px;
+    left:20px;
+
+    background:white;
+
+    padding:10px;
+
+    border-radius:15px;
+
+    border:2px solid pink;
+}
+
+.petal{
+    position:absolute;
+    font-size:20px;
+    animation:fall linear forwards;
+    pointer-events:none;
+}
+
+@keyframes fall{
+
+    from{
+        transform:translateY(-50px);
+    }
+
+    to{
+        transform:translateY(110vh);
+    }
+}
